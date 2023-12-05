@@ -1,39 +1,35 @@
-def arithmetic_arranger(problems, answer_):
+#Code by: Roberto Ochoa Cuevas
+def arithmetic_arranger(problems, answer_=False):
 
-  #Variables
+  #set arranged problems
   arranged_problems = []
-  input = problems
-  operations = []
-  results = []
-
-  #Loops to get a list with a list of the operations
-  for element in input:
-    operations.append(element.split())
 
   #First Rule of errors
-  NumberOfOperations = len(operations)
-  if NumberOfOperations > 5:
+  if len(problems) > 5:
     return 'Error: Too many problems.'
-
-  #Get nums individually
-  for operation in operations:
+    
+  #Initialize lines 
+  line1_list, line2_list, line3_list, result_line_list = [], [], [], []
+  
+  for problem in problems:
+    #Get nums individually
+    num1, sign, num2 = problem.split()
     try:
-      num1 = int(operation[0])
-      sign = operation[1]
-      num2 = int(operation[2])
+      num1 = int(num1)
+      num2 = int(num2)
       
     #Check if signs are correct
       if sign not in ['+', '-']:
         return "Error: Operator must be '+' or '-'."
 
       #Check if numbers are correct
-      if num1 > 999 or num2 > 999:
+      if num1 > 9999 or num2 > 9999:
         return "Error: Numbers cannot be more than four digits."
 
       if sign == "+":
-        results.append(num1+num2)
+        result = num1 + num2
       else:
-        results.append(num1-num2)
+        result = num1 - num2
 
       #Arrange problems
       
@@ -41,22 +37,27 @@ def arithmetic_arranger(problems, answer_):
       length_num1 = len(str(num1))
       length_num2 = len(str(num2))
       
-      larger_num = max(length_num1, length_num2)
-
-      #Set line 1 and line 2
-      line1 = str(num1).rjust(larger_num + 2)
-      line2 = sign + str(num2).rjust(larger_num + 1)
-
-      #Set the dashes
-      x = 0
-      line3_list = []
-      while x < larger_num + 2:
-        line3_list.append("-")
-        x = x + 1
-      line3 = ''.join(line3_list)      
+      max_length= max(length_num1, length_num2)
+    
+      line1_list.append(str(num1).rjust(max_length + 2))
+      line2_list.append(sign + str(num2).rjust(max_length + 1))
+      line3_list.append('-' * (max_length + 2))
+      result_line_list.append(str(result).rjust(max_length + 2))
       
     #Check if there's only digits
     except ValueError:
       return 'Error: Numbers must only contain digits.'
-      
-  return arranged_problems
+
+  #Check if we want answer or not
+  if answer_ is True:
+    # Join lines list with 4 spaces :)
+    arranged_problems.append('    '.join(line1_list))
+    arranged_problems.append('    '.join(line2_list))
+    arranged_problems.append('    '.join(line3_list))
+    arranged_problems.append('    '.join(result_line_list) if result_line_list else '')
+  else: #In case we don't want to return the answer
+    arranged_problems.append('    '.join(line1_list))
+    arranged_problems.append('    '.join(line2_list))
+    arranged_problems.append('    '.join(line3_list))
+  return '\n'.join(arranged_problems) #Return the problems 
+#end of the code<3
